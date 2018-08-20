@@ -1,0 +1,74 @@
+version: '2'
+
+networks:
+  proxy:
+    external: true
+  internal:
+    external: false
+
+services:
+
+  mongodb:
+    extends:
+      file: docker-compose.tmpl.yml
+      service: mongodb-base
+    networks:
+      - proxy
+      - internal
+
+  redis:
+    extends:
+      file: docker-compose.tmpl.yml
+      service: redis-base
+    networks:
+      - proxy
+      - internal
+
+  bitcoin-testnet:
+    extends:
+      file: docker-compose.tmpl.yml
+      service: bitcoin-base-testnet
+    networks:
+      - proxy
+      - internal
+
+  counterparty-testnet:
+    extends:
+      file: docker-compose.tmpl.yml
+      service: counterparty-base-testnet
+    links:
+      - bitcoin-testnet
+    networks:
+      - proxy
+      - internal
+
+  armory-utxsvr-testnet:
+    extends:
+      file: docker-compose.tmpl.yml
+      service: armory-utxsvr-base-testnet
+    links:
+      - bitcoin-testnet
+    networks:
+      - proxy
+      - internal
+
+  counterblock-testnet:
+    extends:
+      file: docker-compose.tmpl.yml
+      service: counterblock-base-testnet
+    links:
+      - bitcoin-testnet
+      - counterparty-testnet
+      - mongodb
+      - redis
+      - armory-utxsvr-testnet
+    networks:
+      - proxy
+      - internal
+
+volumes:
+  bitcoin-data:
+  counterparty-data:
+  counterblock-data:
+  mongodb-data:
+  armory-data:
