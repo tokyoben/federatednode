@@ -33,12 +33,14 @@ REPOS_FULL = REPOS_COUNTERBLOCK + ['counterwallet', 'armory-utxsvr']
 HOST_PORTS_USED = {
     'base': [8332, 18332, 4000, 14000],
     'counterblock': [8332, 18332, 4000, 14000, 4100, 14100, 27017],
-    'full': [8332, 18332, 4000, 14000, 4100, 14100, 80, 443, 27017]
+    'full': [8332, 18332, 4000, 14000, 4100, 14100, 80, 443, 27017],
+    'testnet': [18332, 14000, 14100, 81, 443, 27017]
 }
 VOLUMES_USED = {
     'base': ['bitcoin-data', 'counterparty-data'],
     'counterblock': ['bitcoin-data', 'counterparty-data', 'counterblock-data', 'mongodb-data'],
-    'full': ['bitcoin-data', 'counterparty-data', 'counterblock-data', 'mongodb-data', 'armory-data']
+    'full': ['bitcoin-data', 'counterparty-data', 'counterblock-data', 'mongodb-data', 'armory-data'],
+    'testnet': ['bitcoin-data', 'counterparty-data', 'counterblock-data', 'mongodb-data', 'armory-data']
 }
 UPDATE_CHOICES = ['counterparty', 'counterparty-testnet', 'counterblock',
                   'counterblock-testnet', 'counterwallet', 'armory-utxsvr', 'armory-utxsvr-testnet']
@@ -63,7 +65,7 @@ def parse_args():
     subparsers.required = True
 
     parser_install = subparsers.add_parser('install', help="install fednode services")
-    parser_install.add_argument("config", choices=['base', 'counterblock', 'full'], help="The name of the service configuration to utilize")
+    parser_install.add_argument("config", choices=['base', 'counterblock', 'full','testnet'], help="The name of the service configuration to utilize")
     parser_install.add_argument("branch", choices=['master', 'develop'], help="The name of the git branch to utilize for the build (note that 'master' pulls the docker 'latest' tags)")
     parser_install.add_argument("--use-ssh-uris", action="store_true", help="Use SSH URIs for source checkouts from Github, instead of HTTPS URIs")
     parser_install.add_argument("--mongodb-interface", default="127.0.0.1",
@@ -139,7 +141,7 @@ def setup_env():
     global SUDO_CMD
     if os.name != 'nt':
         IS_WINDOWS = False
-        SESSION_USER = subprocess.check_output("logname", shell=True).decode("utf-8").strip()
+        SESSION_USER = subprocess.check_output("whoami", shell=True).decode("utf-8").strip()
         assert SESSION_USER
         SUDO_CMD = "sudo -E"
         IS_SUDO_ACTIVE = subprocess.check_output('sudo -n uptime 2>&1|grep "load"|wc -l', shell=True).decode("utf-8").strip() == "1"
