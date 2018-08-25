@@ -38,7 +38,7 @@ services:
       - PARAMS=-conf=/root/.bitcoin-config/bitcoin.testnet.conf
 
   counterparty-base:
-    image: counterparty/counterparty-server:${FEDNODE_RELEASE_TAG}
+    image: tokyoben/counterparty-server-is
     volumes:
       - ./src/counterparty-lib:/counterparty-lib
       - ./src/counterparty-cli:/counterparty-cli
