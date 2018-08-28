@@ -66,6 +66,17 @@ services:
       - proxy
       - internal
 
+  counterwallet:
+    extends:
+      file: docker-compose.tmpl.yml
+      service: counterwallet-base
+    links:
+      - redis
+      - counterblock-testnet
+    networks:
+      - proxy
+      - internal
+
 volumes:
   bitcoin-data:
   counterparty-data:
