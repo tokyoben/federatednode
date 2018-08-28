@@ -131,7 +131,7 @@ services:
 
   counterwallet-base:
     hostname: ${HOSTNAME_BASE}-cw
-    image: counterparty/counterwallet:${FEDNODE_RELEASE_TAG}
+    image: tokyoben/counterwallet:latest
     volumes:
       - ./src/counterwallet:/counterwallet
       - ./config/counterwallet/ssl:/ssl_config
@@ -142,8 +142,10 @@ services:
         max-size: "30m"
         max-file: "30"
     ports:
-      - "80:80"
+      - "81:81"
       - "443:443"
+    environment:
+      - TESTNET_ONLY=true
 
   mongodb-base:
     hostname: ${HOSTNAME_BASE}-mongo
