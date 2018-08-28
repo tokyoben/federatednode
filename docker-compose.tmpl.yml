@@ -131,7 +131,7 @@ services:
 
   counterwallet-base:
     hostname: ${HOSTNAME_BASE}-cw
-    image: tokyoben/counterwallet:latest
+    image: counterparty/counterwallet:${FEDNODE_RELEASE_TAG}
     volumes:
       - ./src/counterwallet:/counterwallet
       - ./config/counterwallet/ssl:/ssl_config
