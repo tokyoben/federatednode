@@ -40,8 +40,6 @@ services:
   counterparty-base:
     image: tokyoben/counterparty-server-is
     volumes:
-      - ./src/counterparty-lib:/counterparty-lib
-      - ./src/counterparty-cli:/counterparty-cli
       - ./config/counterparty:/root/.config/counterparty
       - counterparty-data:/root/.local/share/counterparty
     logging:
